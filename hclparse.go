@@ -418,6 +418,40 @@ func (p *MyParser) PrintCsv(path string) error {
 	return nil
 }
 
+func (p *MyParser) OutputAllResources(path string) error {
+
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	output := []string{}
+
+	for _, f := range p.FileList.Files {
+		resources := []string{}
+
+		for _, l := range f.Resource {
+			resources = append(resources, fmt.Sprintf("\"%s\" \"%s\" {", l.Type, l.Label))
+			for _, v := range l.Values {
+				resources = append(resources, v)
+			}
+			resources = append(resources, "}")
+		}
+
+		output = append(output, resources...)
+
+	}
+
+	_, err = f.WriteString(Flatten(output))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // ### HCL Objects
 
 type HCLModule struct {
@@ -666,4 +700,13 @@ func HandleProperty(s string) (key, value string) {
 	value = strings.TrimSpace(ssplit[1])
 
 	return key, value
+}
+
+func Flatten(s []string) string {
+	output := ""
+	for _, v := range s {
+		output = fmt.Sprintf("%s\n%s", output, v)
+	}
+	output = strings.TrimSpace(output)
+	return output
 }

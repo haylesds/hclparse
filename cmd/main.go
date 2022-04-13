@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/dshayles/hclparse"
+	"github.com/haylesds/hclparse"
 )
 
 func main() {
 	p := hclparse.NewParser("terraform_files.txt")
 	p.FindHclObjects()
 
-	p.PrintCsv("test.csv")
+	//p.PrintCsv("test.csv")
+	p.OutputAllResources("test.tf")
 }
