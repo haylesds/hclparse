@@ -433,7 +433,7 @@ func (p *MyParser) OutputAllResources(path string) error {
 		resources := []string{}
 
 		for _, l := range f.Resource {
-			resources = append(resources, fmt.Sprintf("\"%s\" \"%s\" {", l.Type, l.Label))
+			resources = append(resources, fmt.Sprintf("resource \"%s\" \"%s\" {", l.Type, l.Label))
 			for _, v := range l.Values {
 				resources = append(resources, v)
 			}
